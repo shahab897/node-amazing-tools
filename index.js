@@ -14,9 +14,13 @@ app.post('/convert', (req, res) => {
             res.status(500).json({ message: err });
             return
         }
+        let text = '';
         pages.forEach(function (page) {
             console.log(page)
+            text += page;
         });
+
+
     });
     /*simple code to add text to docx and save*/
     // Create a new Word document
