@@ -8,7 +8,7 @@ const options = { layout: 'raw' };
 const app = express();
 app.use(bodyParser.json());
 
-app.post('/convert', (req, res) => {
+app.post('/api/convert', (req, res) => {
     pdfTextExtract.extract(req.body.pdfPath, options, function (err, pages) {
         if (err) {
             res.status(500).json({ message: err });
@@ -38,6 +38,23 @@ app.post('/convert', (req, res) => {
 
     res.status(200).json({ message: 'Success' });
 
+});
+
+// Define an API endpoint that generates a random password
+app.get('/api/password/:length', (req, res) => {
+    // Parse the desired length from the URL parameter
+    const length = parseInt(req.params.length);
+    // Generate a random password of the desired length
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+    let password = '';
+    for (let i = 0; i < length; i++) {
+        // Generate a random index into the characters array
+        const index = Math.floor(Math.random() * characters.length);
+        // Add the character at that index to the password
+        password += characters[index];
+    }
+    // Return the generated password as a JSON response
+    res.json({ password: password });
 });
 
 app.listen(3000, () => {
