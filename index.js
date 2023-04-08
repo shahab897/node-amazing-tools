@@ -39,21 +39,37 @@ app.post('/api/convert', (req, res) => {
     res.status(200).json({ message: 'Success' });
 
 });
-
-// Define an API endpoint that generates a random password
-app.get('/api/password/:length', (req, res) => {
-    // Parse the desired length from the URL parameter
-    const length = parseInt(req.params.length);
-    // Generate a random password of the desired length
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+function generatePassword(length, type = '') {
     let password = '';
+    let characters = '';
+    if (type === 'numeric') {
+        characters = '0123456789';
+    } else if (type === 'alphabetic') {
+        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    } else {
+        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
+    }
     for (let i = 0; i < length; i++) {
         // Generate a random index into the characters array
         const index = Math.floor(Math.random() * characters.length);
         // Add the character at that index to the password
         password += characters[index];
     }
-    // Return the generated password as a JSON response
+    return password;
+}
+//Get Call to generate Mix Password
+app.get('/api/password/:length', (req, res) => {
+    const length = parseInt(req.params.length);
+    const password = generatePassword(length);
+    res.json({ password: password });
+});
+
+//Post Call to generate Password by giving type of password needed
+//Types Included are numeric, alphabetic and mix of all
+app.post('/api/password', (req, res) => {
+    const length = parseInt(req.body.length);
+    const type = req.body.type;
+    const password = generatePassword(length, type);
     res.json({ password: password });
 });
 
