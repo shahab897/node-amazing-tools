@@ -36,7 +36,7 @@ This API retrieves the latest items from an RSS feed URL.
 
 ### Usage
 
-Send a POST request to the API endpoint with the feedUrl parameter containing the URL of the RSS feed to retrieve.
+Send a POST request to the API endpoint , `/api/rss` with the feedUrl parameter containing the URL of the RSS feed to retrieve.
 
 The API will return a JSON array of feed items, each containing title, link, and pubdate properties.
 
