@@ -3,6 +3,9 @@ const pdfTextExtract = require('pdf-text-extract');
 const officegen = require('officegen');
 const fs = require('fs');
 const bodyParser = require('body-parser');
+const FeedParser = require('feedparser');
+const axios = require('axios');
+const request = require('request');
 const options = { layout: 'raw' };
 
 const app = express();
@@ -75,6 +78,46 @@ app.post('/api/password', (req, res) => {
     const type = req.body.type;
     const password = generatePassword(length, type);
     res.json({ password: password });
+});
+
+app.post('/api/rss', async function (req, res) {
+    const feedUrl = req.body.feedUrl;
+    if (!feedUrl) {
+        res.status(400).send('Missing feedUrl parameter');
+        return;
+    }
+
+    const feedReq = request(feedUrl);
+    const feedparser = new FeedParser();
+
+    feedReq.on('error', err => res.status(500).send(err));
+    feedparser.on('error', err => res.status(500).send(err));
+
+    feedReq.on('response', function (feedRes) {
+        if (feedRes.statusCode !== 200) {
+            res.status(500).send(`Error: ${feedRes.statusCode}`);
+            return;
+        }
+        feedRes.pipe(feedparser);
+    });
+
+    const items = [];
+    feedparser.on('readable', function () {
+        const stream = this;
+        let item;
+
+        while (item = stream.read()) {
+            items.push({
+                title: item.title,
+                link: item.link,
+                pubdate: item.pubdate
+            });
+        }
+    });
+
+    feedparser.on('end', function () {
+        res.json(items);
+    });
 });
 
 app.listen(3000, () => {

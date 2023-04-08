@@ -30,6 +30,16 @@ The API has a endpoint, `/api/convert`, which can be accessed via a `POST` reque
 
 The API will return a JSON response with a status code of 200 and a message "PDF has been converted to Word" and file location if the conversion was successful. If an error occurs, the API returns a JSON response with a status code of 500 and the error message.
 
+# 3. RSS Feed Reader API
+
+This API retrieves the latest items from an RSS feed URL.
+
+### Usage
+
+Send a POST request to the API endpoint with the feedUrl parameter containing the URL of the RSS feed to retrieve.
+
+The API will return a JSON array of feed items, each containing title, link, and pubdate properties.
+
 ## License
 
 This project is licensed under the [MIT license](https://opensource.org/licenses/MIT). Feel free to use it however you like.
