@@ -39,13 +39,16 @@ app.post('/api/convert', (req, res) => {
     res.status(200).json({ message: 'Success' });
 
 });
-function generatePassword(length, type = '') {
+// Define a function to generate a random password of a specified length and type
+function generatePassword(length, type) {
     let password = '';
     let characters = '';
     if (type === 'numeric') {
         characters = '0123456789';
-    } else if (type === 'alphabetic') {
-        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+    } else if (type === 'uppercase') {
+        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    } else if (type === 'lowercase') {
+        characters = 'abcdefghijklmnopqrstuvwxyz';
     } else {
         characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
     }
@@ -57,6 +60,7 @@ function generatePassword(length, type = '') {
     }
     return password;
 }
+
 //Get Call to generate Mix Password
 app.get('/api/password/:length', (req, res) => {
     const length = parseInt(req.params.length);
