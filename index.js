@@ -1,15 +1,23 @@
+const PORT = process.env.PORT || 3000;
 const express = require('express');
 const pdfTextExtract = require('pdf-text-extract');
 const officegen = require('officegen');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const FeedParser = require('feedparser');
-const axios = require('axios');
 const request = require('request');
 const options = { layout: 'raw' };
-
 const app = express();
 app.use(bodyParser.json());
+
+const dbFilePath = './urls.json';
+
+if (!fs.existsSync(dbFilePath)) {
+    fs.writeFileSync(dbFilePath, '{}');
+}
+
+const db = JSON.parse(fs.readFileSync(dbFilePath, 'utf-8'));
+
 
 app.post('/api/convert', (req, res) => {
     pdfTextExtract.extract(req.body.pdfPath, options, function (err, pages) {
@@ -118,6 +126,50 @@ app.post('/api/rss', async function (req, res) {
     feedparser.on('end', function () {
         res.json(items);
     });
+});
+
+function generateShortUrl() {
+    const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    let shortUrl = '';
+
+    for (let i = 0; i < 6; i++) {
+        const randomIndex = Math.floor(Math.random() * chars.length);
+        shortUrl += chars[randomIndex];
+    }
+
+    return shortUrl;
+}
+
+app.post('/api/shortenurl', function (req, res) {
+    const longUrl = req.body.longUrl;
+    // use this code to get baseurl when in production
+    // const baseUrl = req.protocol + '://' + req.hostname + req.baseUrl;
+
+    if (!longUrl) {
+        res.status(400).send('Missing longUrl parameter');
+        return;
+    }
+
+    let shortUrl;
+    do {
+        shortUrl = generateShortUrl();
+    } while (db[shortUrl]);
+
+    db[shortUrl] = longUrl;
+    fs.writeFileSync(dbFilePath, JSON.stringify(db));
+
+    res.json({ shortUrl: `http://localhost:${PORT}/${shortUrl}` });
+});
+
+app.get('/:shortUrl', function (req, res) {
+    const longUrl = db[req.params.shortUrl];
+
+    if (!longUrl) {
+        res.status(404).send('Short URL not found');
+        return;
+    }
+
+    res.redirect(longUrl);
 });
 
 app.listen(3000, () => {
