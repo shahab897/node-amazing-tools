@@ -24,7 +24,6 @@ if (!fs.existsSync(dbFilePath)) {
 
 const db = JSON.parse(fs.readFileSync(dbFilePath, 'utf-8'));
 
-
 app.post('/api/convert', (req, res) => {
     pdfTextExtract.extract(req.body.pdfPath, options, function (err, pages) {
         if (err) {
@@ -56,7 +55,7 @@ app.post('/api/convert', (req, res) => {
     res.status(200).json({ message: 'Success' });
 
 });
-// Define a function to generate a random password of a specified length and type
+
 function generatePassword(length, type) {
     let password = '';
     let characters = '';
@@ -78,15 +77,12 @@ function generatePassword(length, type) {
     return password;
 }
 
-//Get Call to generate Mix Password
 app.get('/api/password/:length', (req, res) => {
     const length = parseInt(req.params.length);
     const password = generatePassword(length);
     res.json({ password: password });
 });
 
-//Post Call to generate Password by giving type of password needed
-//Types Included are numeric, alphabetic and mix of all
 app.post('/api/password', (req, res) => {
     const length = parseInt(req.body.length);
     const type = req.body.type;
