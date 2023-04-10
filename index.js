@@ -224,7 +224,6 @@ app.post('/api/resize', function (req, res) {
         });
 });
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');
