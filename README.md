@@ -8,6 +8,7 @@ This repository contains various tools Api's developed in Node.js.
 2. Password Generator
 3. RSS Feed Reader
 4. URL Shortener
+5. Image Resizer
 
 ## Requirements
 
