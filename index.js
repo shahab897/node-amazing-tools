@@ -1,17 +1,18 @@
 const express = require('express');
-const pdfTextExtract = require('pdf-text-extract');
-const officegen = require('officegen');
 const fs = require('fs');
 const bodyParser = require('body-parser');
 const FeedParser = require('feedparser');
 const request = require('request');
 const sharp = require('sharp');
 const path = require('path');
-const options = { layout: 'raw' };
 const PORT = process.env.PORT || 3000;
 const app = express();
+const pdfToDocx = require('./Tools/pdfToDocx');
+
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 
 const dbFilePath = './urls.json';
 const dir = path.resolve(path.join(__dirname, 'images'));
@@ -24,37 +25,7 @@ if (!fs.existsSync(dbFilePath)) {
 
 const db = JSON.parse(fs.readFileSync(dbFilePath, 'utf-8'));
 
-app.post('/api/convert', (req, res) => {
-    pdfTextExtract.extract(req.body.pdfPath, options, function (err, pages) {
-        if (err) {
-            res.status(500).json({ message: err });
-            return
-        }
-        let text = '';
-        pages.forEach(function (page) {
-            console.log(page)
-            text += page;
-        });
-
-
-    });
-    /*simple code to add text to docx and save*/
-    // Create a new Word document
-    const docx = officegen('docx');
-
-    // Set the title of the document
-    docx.title('Converted PDF');
-
-    // Add text to the document
-    docx.addText('Text extracted from PDF file', { font_face: 'Arial', font_size: 14 });
-
-    // Save the document
-    const stream = fs.createWriteStream('./path/to/output.docx');
-    docx.generate(stream);
-
-    res.status(200).json({ message: 'Success' });
-
-});
+app.use('/api/convert', pdfToDocx);
 
 function generatePassword(length, type) {
     let password = '';
