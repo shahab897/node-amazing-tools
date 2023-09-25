@@ -8,6 +8,12 @@ router.get('/:length', (req, res) => {
     res.json({ password: password });
 });
 
+router.post('/', (req, res) => {
+    const length = parseInt(req.body.length);
+    const type = req.body.type;
+    const password = generatePassword(length, type);
+    res.json({ password: password });
+});
 function generatePassword(length, type) {
     let password = '';
     let characters = '';
