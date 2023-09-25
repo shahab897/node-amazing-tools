@@ -5,10 +5,12 @@ const FeedParser = require('feedparser');
 const request = require('request');
 const sharp = require('sharp');
 const path = require('path');
+const options = { layout: 'raw' };
 const PORT = process.env.PORT || 3000;
 const app = express();
 const pdfToDocx = require('./Tools/pdfToDocx');
 
+const passwordGenerator = require('./Tools/passwordGenerator');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -26,40 +28,8 @@ if (!fs.existsSync(dbFilePath)) {
 const db = JSON.parse(fs.readFileSync(dbFilePath, 'utf-8'));
 
 app.use('/api/convert', pdfToDocx);
+app.use('/api/password', passwordGenerator);
 
-function generatePassword(length, type) {
-    let password = '';
-    let characters = '';
-    if (type === 'numeric') {
-        characters = '0123456789';
-    } else if (type === 'uppercase') {
-        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    } else if (type === 'lowercase') {
-        characters = 'abcdefghijklmnopqrstuvwxyz';
-    } else {
-        characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-    }
-    for (let i = 0; i < length; i++) {
-        // Generate a random index into the characters array
-        const index = Math.floor(Math.random() * characters.length);
-        // Add the character at that index to the password
-        password += characters[index];
-    }
-    return password;
-}
-
-app.get('/api/password/:length', (req, res) => {
-    const length = parseInt(req.params.length);
-    const password = generatePassword(length);
-    res.json({ password: password });
-});
-
-app.post('/api/password', (req, res) => {
-    const length = parseInt(req.body.length);
-    const type = req.body.type;
-    const password = generatePassword(length, type);
-    res.json({ password: password });
-});
 
 app.post('/api/rss', async function (req, res) {
     const feedUrl = req.body.feedUrl;
