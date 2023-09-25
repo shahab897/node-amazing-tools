@@ -9,6 +9,7 @@ router.get('/:length', (req, res) => {
 });
 
 router.post('/', (req, res) => {
+    //add check to limit max length
     const length = parseInt(req.body.length);
     const type = req.body.type;
     const password = generatePassword(length, type);
