@@ -1,16 +1,15 @@
 const express = require('express');
 const fs = require('fs');
 const bodyParser = require('body-parser');
-const FeedParser = require('feedparser');
 const request = require('request');
 const sharp = require('sharp');
 const path = require('path');
-const options = { layout: 'raw' };
 const PORT = process.env.PORT || 3000;
 const app = express();
 const pdfToDocx = require('./Tools/pdfToDocx');
-
 const passwordGenerator = require('./Tools/passwordGenerator');
+const rss = require('./Tools/rss');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,47 +28,7 @@ const db = JSON.parse(fs.readFileSync(dbFilePath, 'utf-8'));
 
 app.use('/api/convert', pdfToDocx);
 app.use('/api/password', passwordGenerator);
-
-
-app.post('/api/rss', async function (req, res) {
-    const feedUrl = req.body.feedUrl;
-    if (!feedUrl) {
-        res.status(400).send('Missing feedUrl parameter');
-        return;
-    }
-
-    const feedReq = request(feedUrl);
-    const feedparser = new FeedParser();
-
-    feedReq.on('error', err => res.status(500).send(err));
-    feedparser.on('error', err => res.status(500).send(err));
-
-    feedReq.on('response', function (feedRes) {
-        if (feedRes.statusCode !== 200) {
-            res.status(500).send(`Error: ${feedRes.statusCode}`);
-            return;
-        }
-        feedRes.pipe(feedparser);
-    });
-
-    const items = [];
-    feedparser.on('readable', function () {
-        const stream = this;
-        let item;
-
-        while (item = stream.read()) {
-            items.push({
-                title: item.title,
-                link: item.link,
-                pubdate: item.pubdate
-            });
-        }
-    });
-
-    feedparser.on('end', function () {
-        res.json(items);
-    });
-});
+app.use('/api/rss', rss);
 
 function generateShortUrl() {
     const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
