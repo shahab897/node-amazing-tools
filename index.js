@@ -73,6 +73,18 @@ app.get("/:shortUrl", function (req, res) {
   res.redirect(longUrl);
 });
 
+//random data generator API
+app.get("/random-data/:dataType", (req, res) => {
+  // Get the data type from the request URL
+  const dataType = req.params.dataType;
+
+  //add check here If the data type is not supported, return an error message
+
+  data = {};
+  // Send the data back to the client in JSON format
+  res.json(data);
+});
+
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.listen(3000, () => {
