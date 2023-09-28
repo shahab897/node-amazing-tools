@@ -25,6 +25,11 @@ This repository contains various tools Api's developed in Node.js.
 
 ```bash
 npm install
+```
+
+3. Run Project
+
+```bash
 npm run dev
 ```
 
