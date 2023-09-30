@@ -84,6 +84,8 @@ const dataTypes = {
     birthdate: faker.date.birthdate(),
     registeredAt: faker.date.past(),
   },
+  company: faker.company.name(),
+  address: faker.address.streetAddress(),
 };
 
 //random data generator API
