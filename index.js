@@ -32,17 +32,6 @@ app.use("/api/rss", rss);
 app.use("/api/resize", ImageResizer);
 app.use("/api/shortenurl", urlShortner);
 
-app.get("/:shortUrl", function (req, res) {
-  const longUrl = db[req.params.shortUrl];
-
-  if (!longUrl) {
-    res.status(404).send("Short URL not found");
-    return;
-  }
-
-  res.redirect(longUrl);
-});
-
 const dataTypes = {
   user: {
     userId: faker.string.uuid(),
