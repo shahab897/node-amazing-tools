@@ -86,6 +86,13 @@ const dataTypes = {
   },
   company: faker.company.name(),
   address: faker.address.streetAddress(),
+  product: {
+    id: faker.datatype.uuid(), // Unique identifier for the product
+    name: faker.commerce.productName(), // Name of the product
+    description: faker.commerce.productDescription(), // Description of the product
+    price: faker.commerce.price(), // Price of the product
+    quantity: faker.datatype.number(100), // Quantity of the product available
+  },
 };
 
 //random data generator API
