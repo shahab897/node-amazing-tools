@@ -39,4 +39,15 @@ router.post("/api/shortenurl", function (req, res) {
   res.json({ shortUrl: `http://localhost:${PORT}/${shortUrl}` });
 });
 
+app.get("/:shortUrl", function (req, res) {
+  const longUrl = db[req.params.shortUrl];
+
+  if (!longUrl) {
+    res.status(404).send("Short URL not found");
+    return;
+  }
+
+  res.redirect(longUrl);
+});
+
 module.exports = router;
