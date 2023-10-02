@@ -1,6 +1,9 @@
 const express = require("express");
 const router = express.Router();
 const request = require("request");
+const fs = require("fs");
+
+const db = JSON.parse(fs.readFileSync(dbFilePath, "utf-8"));
 
 function generateShortUrl() {
   const chars =
@@ -15,7 +18,7 @@ function generateShortUrl() {
   return shortUrl;
 }
 
-app.post("/api/shortenurl", function (req, res) {
+router.post("/api/shortenurl", function (req, res) {
   const longUrl = req.body.longUrl;
   // use this code to get baseurl when in production
   // const baseUrl = req.protocol + '://' + req.hostname + req.baseUrl;
