@@ -9,6 +9,7 @@ This repository contains various tools Api's developed in Node.js.
 3. RSS Feed Reader
 4. URL Shortener
 5. Image Resizer
+6. Fake Data Generator
 
 ## Requirements
 
