@@ -18,7 +18,7 @@ function generateShortUrl() {
   return shortUrl;
 }
 
-router.post("/api/shortenurl", function (req, res) {
+router.post("/", function (req, res) {
   const longUrl = req.body.longUrl;
   // use this code to get baseurl when in production
   // const baseUrl = req.protocol + '://' + req.hostname + req.baseUrl;
