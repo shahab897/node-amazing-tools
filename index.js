@@ -92,6 +92,7 @@ const dataTypes = {
     description: faker.commerce.productDescription(), // Description of the product
     price: faker.commerce.price(), // Price of the product
     quantity: faker.datatype.number(100), // Quantity of the product available
+    images: [faker.image.imageUrl(), faker.image.imageUrl()], // Array of image URLs for the product
   },
 };
 
