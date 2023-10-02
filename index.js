@@ -100,15 +100,12 @@ const dataTypes = {
 app.get("/random-data/:dataType", (req, res) => {
   // Get the data type from the request URL
   const dataType = req.params.dataType;
-
   // Generate random data for the specified data type
   const data = dataTypes[dataType];
-
   // If the data type is not supported, return an error message
   if (!data) {
     return res.status(400).send("Invalid data type");
   }
-
   data = {};
   // Send the data back to the client in JSON format
   res.json(data);
