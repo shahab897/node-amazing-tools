@@ -32,6 +32,9 @@ app.use("/api/rss", rss);
 app.use("/api/resize", ImageResizer);
 app.use("/api/shortenurl", urlShortner);
 
+const randomNumber = faker.datatype.number();
+const randomNumberBetween1And100 = Math.floor(randomNumber * 100) + 1;
+
 const dataTypes = {
   user: {
     userId: faker.string.uuid(),
@@ -51,6 +54,13 @@ const dataTypes = {
     price: faker.commerce.price(), // Price of the product
     quantity: faker.datatype.number(100), // Quantity of the product available
     images: [faker.image.imageUrl(), faker.image.imageUrl()], // Array of image URLs for the product
+  },
+  order: {
+    id: faker.string.uuid(),
+    customerId: faker.string.uuid(),
+    productId: faker.string.uuid(),
+    quantity: randomNumberBetween1And100,
+    totalPrice: faker.commerce.price(),
   },
 };
 
