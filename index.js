@@ -20,8 +20,6 @@ if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
 }
 
-const db = JSON.parse(fs.readFileSync(dbFilePath, "utf-8"));
-
 app.use("/api/convert", pdfToDocx);
 app.use("/api/password", passwordGenerator);
 app.use("/api/rss", rss);
