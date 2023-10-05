@@ -81,6 +81,6 @@ app.get("/random-data/:dataType", (req, res) => {
 
 app.use("/images", express.static(path.join(__dirname, "images")));
 
-app.listen(3000, () => {
+app.listen(PORT, () => {
   console.log("Server running on port 3000");
 });
