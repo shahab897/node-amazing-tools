@@ -15,13 +15,9 @@ const urlShortner = require("./Tools/urlShortner");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const dbFilePath = "./urls.json";
 const dir = path.resolve(path.join(__dirname, "images"));
 if (!fs.existsSync(dir)) {
   fs.mkdirSync(dir);
-}
-if (!fs.existsSync(dbFilePath)) {
-  fs.writeFileSync(dbFilePath, "{}");
 }
 
 const db = JSON.parse(fs.readFileSync(dbFilePath, "utf-8"));

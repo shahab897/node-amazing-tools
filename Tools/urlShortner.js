@@ -3,6 +3,11 @@ const router = express.Router();
 const request = require("request");
 const fs = require("fs");
 
+const dbFilePath = "./urls.json";
+if (!fs.existsSync(dbFilePath)) {
+  fs.writeFileSync(dbFilePath, "{}");
+}
+
 const db = JSON.parse(fs.readFileSync(dbFilePath, "utf-8"));
 
 function generateShortUrl() {
