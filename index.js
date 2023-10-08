@@ -28,7 +28,14 @@ app.use("/api/shortenurl", urlShortner);
 
 const randomNumber = faker.datatype.number();
 const randomNumberBetween1And100 = Math.floor(randomNumber * 100) + 1;
+function generatePhoneNumber() {
+  // Generate a random phone number in the format (XXX) XXX-XXXX
+  const areaCode = faker.datatype.number(999);
+  const prefix = faker.datatype.number(999);
+  const suffix = faker.datatype.number(9999);
 
+  return `(${areaCode}) ${prefix}-${suffix}`;
+}
 const dataTypes = {
   user: {
     userId: faker.string.uuid(),
@@ -55,6 +62,13 @@ const dataTypes = {
     productId: faker.string.uuid(),
     quantity: randomNumberBetween1And100,
     totalPrice: faker.commerce.price(),
+  },
+  customer: {
+    id: faker.string.uuid(),
+    name: faker.name.fullName(),
+    email: faker.internet.email(),
+    phone: generatePhoneNumber(),
+    address: faker.address.streetAddress(),
   },
 };
 
