@@ -70,6 +70,14 @@ const dataTypes = {
     phone: generatePhoneNumber(),
     address: faker.address.streetAddress(),
   },
+  employee: {
+    id: faker.string.uuid(),
+    name: faker.name.fullName(),
+    email: faker.internet.email(),
+    phone: generatePhoneNumber(),
+    jobTitle: faker.name.jobTitle(),
+    salary: faker.commerce.price(),
+  },
 };
 
 //random data generator API
