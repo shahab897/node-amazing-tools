@@ -20,7 +20,7 @@ This repository contains various tools Api's developed in Node.js.
 
 1. Clone the repository:
 
-`git clone https://github.com/username/node-amazing-tools.git`
+`git clone https://github.com/shahab897/node-amazing-tools.git`
 
 2. Install dependencies:
 
